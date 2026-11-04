@@ -8,8 +8,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY hello_world.py .
 
-ARG application_version=v0.0.0-dev # Temporary default value, will be overwritten by GitHub Actions workflow
+ARG APPLICATION_VERSION=v0.0.0-dev # Temporary default value, will be overwritten by GitHub Actions workflow
 
-ENV APP_VERSION={application_version}
+ENV APP_VERSION=${APPLICATION_VERSION}
 
 CMD ["python", "hello_world.py"]
