@@ -1,6 +1,6 @@
 
 resource "aws_ecr_repository" "image-registry" {
-  name                 = var.project_name
+  name                 = neevgef/var.project_name
   image_tag_mutability = "IMMUTABLE"
 
   image_scanning_configuration {

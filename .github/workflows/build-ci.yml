@@ -46,24 +46,6 @@ jobs:
           echo "APP_VERSION=${{ steps.version.outputs.new_version }}" >> "$GITHUB_ENV"
           echo "Release version: ${{ steps.version.outputs.new_version }}"
 
-      - name: Debug GitHub OIDC claims
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const token = await core.getIDToken('sts.amazonaws.com');
-
-            const claims = JSON.parse(
-                Buffer.from(token.split('.')[1], 'base64url').toString()
-            );
-
-            core.info(JSON.stringify({
-                iss: claims.iss,
-                aud: claims.aud,
-                sub: claims.sub,
-                repository: claims.repository,
-                ref: claims.ref
-            }, null, 2));
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
@@ -81,7 +63,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v6
         with:
-          images: ${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}/${{ env.IMAGE_NAME }}
+          images: ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE_NAME }}
           # Extract a tag for the commit sha
           tags: |
             type=sha,prefix=sha-,format=short
@@ -107,7 +89,7 @@ jobs:
         with:
           task-definition: ${{ env.AWS_ECS_TASK_DEFINITION }}
           container-name: ${{ env.AWS_CONTAINER_NAME }}
-          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}:${{ env.APP_VERSION }}
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.IMAGE_NAME }}:${{ env.APP_VERSION }}
 
       # Deploy the new task definition to ECS.
       - name: Deploy to Amazon ECS
