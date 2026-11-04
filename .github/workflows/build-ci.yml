@@ -13,6 +13,10 @@ env:
   APP_VERSION: 0.0.0 # default value, will be overwritten by VERSION file
   AWS_REGION: eu-west-2 # London
   AWS_ECR_REPOSITORY: image-registry
+  AWS_CONTAINER_NAME: greenfield-python
+  AWS_ECS_TASK_DEFINITION: .github/workflows/ecs-task-definition.json
+  AWS_ECS_SERVICE: greenfield-python-service
+  AWS_ECS_CLUSTER: greenfield-python-cluster
 
 jobs:
   build:
@@ -78,4 +82,21 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      # Inject the new image into the ECS task definition.
+      - name: Render ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.AWS_ECS_TASK_DEFINITION }}
+          container-name: ${{ env.AWS_CONTAINER_NAME }}
+          image: ${{ steps.login-ecr.outputs.registry }}/${{ env.AWS_ECR_REPOSITORY }}:${{ env.APP_VERSION }}
+
+      # Deploy the new task definition to ECS.
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.AWS_ECS_SERVICE }}
+          cluster: ${{ env.AWS_ECS_CLUSTER }}
+          wait-for-service-stability: true
     

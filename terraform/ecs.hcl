@@ -11,7 +11,7 @@ resource "aws_ecs_task_definition" "greenfield" {
 
   container_definitions = jsonencode([
     {
-      name      = "hello-world"
+      name      = "greenfield-python"
       image     = "${aws_ecr_repository.greenfield.repository_url}:${var.app_version}"
       essential = true
 
@@ -19,15 +19,6 @@ resource "aws_ecs_task_definition" "greenfield" {
         containerPort = var.container_port
         protocol      = "tcp"
       }]
-
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          "awslogs-group"         = aws_cloudwatch_log_group.app.name
-          "awslogs-region"        = var.aws_region
-          "awslogs-stream-prefix" = "ecs"
-        }
-      }
     }
   ])
 }
