@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - app/**
+  workflow_dispatch:
 
 env:
   # Container Registry
