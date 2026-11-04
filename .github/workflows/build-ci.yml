@@ -82,7 +82,7 @@ jobs:
         with:
           push: true
           build-args: |
-            APP_VERSION=${{ env.APP_VERSION }}
+            APPLICATION_VERSION=${{ env.APP_VERSION }}
           tags: ${{ steps.meta.outputs.tags }}
           context: ./app
           cache-from: type=gha
