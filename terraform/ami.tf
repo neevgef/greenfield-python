@@ -63,19 +63,35 @@ resource "aws_iam_role" "github_actions" {
   permissions_boundary = var.permissions_boundary
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Federated = aws_iam_openid_connect_provider.github.arn
-      }
-      Action = "sts:AssumeRoleWithWebIdentity"
-      Condition = {
-        StringEquals = {
-          "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-          "token.actions.githubusercontent.com:sub" = "repo:${var.github_repository}:ref:refs/heads/main"
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Statement1",
+            "Effect": "Allow",
+            "Action": [
+                "ecr:PutImage",
+                "ecr:CreateRepository",
+                "ecr:TagResource",
+                "ecr:UntagResource"
+            ],
+            "Resource": [
+                "arn:aws:ecr:eu-west-2:030454160336:repository/image-registry"
+            ]
+        },
+        {
+            "Sid": "Statement2",
+            "Effect": "Allow",
+            "Action": [
+                "ecs:RegisterContainerInstance",
+                "ecs:UpdateContainerAgent",
+                "ecs:RunTask",
+                "ecs:StartTask",
+                "ecs:StopTask"
+            ],
+            "Resource": [
+                "*"
+            ]
         }
-      }
-    }]
-  })
+    ]
+    })
 }
