@@ -29,8 +29,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Read app version from VERSION file
-        run: echo "APP_VERSION=$(cat VERSION)" >> $GITHUB_ENV
+      - name: Calculate semantic version
+        id: version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release_branches: main
+          default_bump: patch
+          initial_version: v1.0.0
+
+      - name: Set application version
+        run: |
+          echo "APP_VERSION=${{ steps.version.outputs.new_version }}" >> "$GITHUB_ENV"
+          echo "Release version: ${{ steps.version.outputs.new_version }}"
 
       # Login against a registry
       # https://github.com/docker/login-action
