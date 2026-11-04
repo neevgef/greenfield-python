@@ -3,7 +3,7 @@ from flask import Flask, jsonify
 
 app = Flask(__name__)
 
-VERSION = os.getenv("APP_VERSION", "Version variable not set")
+VERSION = os.getenv("APP_VERSION", "Version variable not set!")
 
 
 @app.route("/")
