@@ -18,6 +18,7 @@ resource "aws_ecs_task_definition" "greenfield" {
       portMappings = [{
         containerPort = var.container_port
         protocol      = "tcp"
+        appProtocol   = "http"
       }]
     }
   ])

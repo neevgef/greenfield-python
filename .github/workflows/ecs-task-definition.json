@@ -10,7 +10,6 @@
   "containerDefinitions": [
     {
       "name": "greenfield-python",
-      "image": "placeholder",
       "essential": true,
       "portMappings": [
         {
