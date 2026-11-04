@@ -47,7 +47,7 @@ jobs:
           echo "Release version: ${{ steps.version.outputs.new_version }}"
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::030454160336:role/exam-github-actions
           aws-region: ${{ env.AWS_REGION }}
