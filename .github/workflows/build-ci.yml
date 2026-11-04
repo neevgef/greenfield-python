@@ -61,3 +61,5 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           context: ./app
+
+    
