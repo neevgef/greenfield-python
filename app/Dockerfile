@@ -6,7 +6,7 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY hello_world .
+COPY hello_world.py .
 
 ARG application_version=0.0.0
 
