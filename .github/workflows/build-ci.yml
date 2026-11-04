@@ -45,9 +45,9 @@ jobs:
         run: |
           APP_VERSION="0.0.0"
           if [ -z "${{ steps.version.outputs.new_version }}" ]; then
-            APP_VERSION="${{ steps.version.outputs.new_version }}"
+            APP_VERSION="${{ steps.version.outputs.previous_version }}"
           else
-            APP_VERSION="${{ steps.version.outputs.old_version }}"
+            APP_VERSION="${{ steps.version.outputs.new_version }}"
           fi
           echo "APP_VERSION=$APP_VERSION" >> "$GITHUB_ENV"
           echo "Release version: $APP_VERSION"
