@@ -14,7 +14,7 @@ env:
   AWS_REGION: eu-west-2 # London
   AWS_ECR_REPOSITORY: image-registry
   AWS_CONTAINER_NAME: greenfield-python
-  AWS_ECS_TASK_DEFINITION: ecs-task-definition.json
+  AWS_ECS_TASK_DEFINITION: ./.github/workflows/ecs-task-definition.json
   AWS_ECS_SERVICE: greenfield-python-service
   AWS_ECS_CLUSTER: greenfield-python-cluster
 
