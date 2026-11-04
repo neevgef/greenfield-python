@@ -46,6 +46,25 @@ jobs:
           echo "APP_VERSION=${{ steps.version.outputs.new_version }}" >> "$GITHUB_ENV"
           echo "Release version: ${{ steps.version.outputs.new_version }}"
 
+      - name: Debug GitHub OIDC claims
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const core = require('@actions/core');
+            const token = await core.getIDToken('sts.amazonaws.com');
+
+            const claims = JSON.parse(
+                Buffer.from(token.split('.')[1], 'base64url').toString()
+            );
+
+            core.info(JSON.stringify({
+                iss: claims.iss,
+                aud: claims.aud,
+                sub: claims.sub,
+                repository: claims.repository,
+                ref: claims.ref
+            }, null, 2));
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
         with:
