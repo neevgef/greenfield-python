@@ -13,7 +13,7 @@ env:
   # Image Name - <account>/<repo> (aka neevgef/greenfield-python)
   IMAGE_NAME: ${{ github.repository }}
   APP_VERSION: 0.0.0 # default value, will be overwritten by VERSION file
-  
+  AWS_REGION: eu-west-2 # London
 
 jobs:
   build:
@@ -41,6 +41,13 @@ jobs:
         run: |
           echo "APP_VERSION=${{ steps.version.outputs.new_version }}" >> "$GITHUB_ENV"
           echo "Release version: ${{ steps.version.outputs.new_version }}"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
 
       # Login against a registry
       # https://github.com/docker/login-action
